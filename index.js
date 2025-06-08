@@ -1,16 +1,28 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+
 const port = process.env.PORT || 3000;
 
-// Route for root URL - sends "Hello, world!"
+// Serve static files from the "client" folder
+app.use(express.static(path.join(__dirname, 'client')));
+
+// Root route — shows "Hello, world!"
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
-// Serve static files from 'client' directory for other requests
-app.use(express.static(path.join(__dirname, 'client')));
+// Sample API route
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from Express API!' });
+});
 
+// ✅ New endpoint: /api/status
+app.get('/api/status', (req, res) => {
+  res.json({ status: 'OK', uptime: process.uptime() });
+});
+
+// Start server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
